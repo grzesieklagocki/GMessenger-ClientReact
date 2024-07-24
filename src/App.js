@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { Component } from "react";
+import React from "react";
 import Conversation from "./components/Conversation";
 
 function App() {

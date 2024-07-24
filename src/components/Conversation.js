@@ -1,29 +1,21 @@
 import { useState } from "react";
+import MessageTextInput from "./MessageTextInput";
 
 function Conversation() {
-  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  function onTextChange(e) {
-    setMessage(e.target.value);
-  }
-
-  function onSubmit(e) {
-    e.preventDefault();
-    messages.push(message);
-    setMessage("");
+  function handleSendMessage(text) {
+    setMessages([...messages, text]); // add latest message
+    console.log("Wysłano:", text);
   }
 
   return (
-    <form>
-      <input type="text" value={message} onChange={onTextChange} />
-      <input type="submit" onClick={onSubmit}></input>
-      <label>
-        {messages.map((msg) => (
-          <div>{msg}</div>
-        ))}
-      </label>
-    </form>
+    <div>
+      <MessageTextInput onMessageSend={handleSendMessage} />
+      {messages.map((msg) => (
+        <div>{msg}</div>
+      ))}
+    </div>
   );
 }
 
