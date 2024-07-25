@@ -1,11 +1,11 @@
 import "./App.css";
 import React from "react";
-import Conversation from "./components/Conversation";
+import GMessenger from "./components/GMessenger";
 
 function App() {
   return (
     <div className="App">
-      <Conversation />
+      <GMessenger />
     </div>
   );
 }
