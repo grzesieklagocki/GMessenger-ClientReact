@@ -1,12 +1,14 @@
-function MessageTextInput({ onMessageSend }) {
+function MessageTextInput({ placeholder, onSubmit }) {
   function handleKeyDown(e) {
     if (e.key === "Enter") {
-      onMessageSend(e.target.value);
+      onSubmit(e.target.value);
       e.target.value = "";
     }
   }
 
-  return <input type="text" onKeyDown={handleKeyDown} />;
+  return (
+    <input type="text" placeholder={placeholder} onKeyDown={handleKeyDown} />
+  );
 }
 
 export default MessageTextInput;
