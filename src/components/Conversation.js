@@ -22,6 +22,8 @@ function Conversation() {
 
     addMessage(message);
     server.current.sendMessage(message);
+    
+    setMessage("");
   }, [message, addMessage]);
 
   return (
