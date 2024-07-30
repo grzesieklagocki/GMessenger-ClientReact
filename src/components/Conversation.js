@@ -12,7 +12,8 @@ function Conversation() {
   }, []);
 
   useEffect(() => {
-    server.current = new WebSocketConnection("localhost", 8080, addMessage);
+    server.current = new WebSocketConnection("localhost", 8080);
+    server.current.onMessageReceive = addMessage;
 
     return () => server.current.close();
   }, [addMessage]);
@@ -22,7 +23,7 @@ function Conversation() {
 
     addMessage(message);
     server.current.sendMessage(message);
-    
+
     setMessage("");
   }, [message, addMessage]);
 
