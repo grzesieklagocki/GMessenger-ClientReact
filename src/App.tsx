@@ -1,11 +1,8 @@
-import './App.css'
+import "./App.css";
+import GMessenger from "./components/GMessenger";
 
 function App() {
-
-  return (
-    <>
-    </>
-  )
+  return <GMessenger />;
 }
 
-export default App
+export default App;
