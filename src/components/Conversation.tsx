@@ -1,18 +1,21 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import MessageTextInput from "./MessageTextInput";
 import WebSocketConnection from "../connection/WebSocketConnection";
+import ConnectionManager from "../connection/ConnectionManager";
 
 function Conversation() {
   const [messages, setMessages] = useState<string[]>([]);
   const [message, setMessage] = useState<string>("");
 
-  const server = useRef<WebSocketConnection | null>(null);
+  const server = useRef<ConnectionManager | null>(null);
   const addMessage = useCallback((msg: string) => {
     setMessages((messages) => [...messages, msg]);
   }, []);
 
   useEffect(() => {
-    server.current = new WebSocketConnection("localhost", 8080);
+    server.current = new ConnectionManager(
+      new WebSocketConnection("localhost", 8080)
+    );
     server.current.onDataReceived = addMessage;
 
     return () => server.current?.dispose();
