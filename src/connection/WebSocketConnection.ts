@@ -1,12 +1,13 @@
 import Utils from "../utils/utils";
+import Connection from "./Connection";
 
-class WebSocketConnection {
-  host: string;
-  port: number;
+class WebSocketConnection implements Connection {
+  private websocket: WebSocket | null = null;
+  private host: string;
+  private port: number;
   get url(): string {
     return this.host && this.port ? `ws://${this.host}:${this.port}` : "";
   }
-  websocket: WebSocket | null = null;
 
   constructor(host: string, port: number) {
     this.host = host;
@@ -19,10 +20,31 @@ class WebSocketConnection {
   #initDefaultEventHandlers() {
     this.onConnect = () => {};
     this.onDisconnect = () => {};
-    this.onMessageReceive = () => {};
+    this.onDataReceived = () => {};
+    this.onError = () => {};
   }
 
-  set onConnect(callback: (e: Event) => any) {
+  dispose() {
+    Utils.DEBUG(`Closing connection... (${this.url})`);
+    this.websocket?.close();
+    this.websocket = null;
+  }
+
+  sendData(message: string) {
+    Utils.DEBUG(`Sent message to server (${this.url}): "${message}"`);
+    this.websocket?.send(message);
+  }
+
+  set onDataReceived(callback: (e: string) => any) {
+    if (this.websocket === null) throw Error("Websocket is null");
+
+    this.websocket.onmessage = (e) => {
+      Utils.DEBUG(`Received message from server (${this.url}): "${e.data}"`, e);
+      callback(e.data);
+    };
+  }
+
+  set onConnect(callback: (e: Event) => void) {
     if (this.websocket === null) throw Error("Websocket is null");
 
     this.websocket.onopen = (e) => {
@@ -40,23 +62,13 @@ class WebSocketConnection {
     };
   }
 
-  set onMessageReceive(callback: (e: string) => any) {
+  set onError(callback: (e: Event) => any) {
     if (this.websocket === null) throw Error("Websocket is null");
 
-    this.websocket.onmessage = (e) => {
-      Utils.DEBUG(`Received message from server (${this.url}): "${e.data}"`, e);
-      callback(e.data);
+    this.websocket.onerror = (e) => {
+      Utils.DEBUG(`Error with server connection: (${this.url})`, e);
+      callback(e);
     };
-  }
-
-  close() {
-    Utils.DEBUG(`Closing connection... (${this.url})`);
-    this.websocket?.close();
-  }
-
-  sendMessage(message: string) {
-    Utils.DEBUG(`Sent message to server (${this.url}): "${message}"`);
-    this.websocket?.send(message);
   }
 }
 

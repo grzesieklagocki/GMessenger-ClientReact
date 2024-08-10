@@ -13,16 +13,16 @@ function Conversation() {
 
   useEffect(() => {
     server.current = new WebSocketConnection("localhost", 8080);
-    server.current.onMessageReceive = addMessage;
+    server.current.onDataReceived = addMessage;
 
-    return () => server.current?.close();
+    return () => server.current?.dispose();
   }, [addMessage]);
 
   useEffect(() => {
     if (message.trim() === "") return;
 
     addMessage(message);
-    server.current?.sendMessage(message);
+    server.current?.sendData(message);
 
     setMessage("");
   }, [message, addMessage]);
