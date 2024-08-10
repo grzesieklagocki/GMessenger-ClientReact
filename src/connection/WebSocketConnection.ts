@@ -12,7 +12,6 @@ class WebSocketConnection {
     this.host = host;
     this.port = port;
     this.websocket = new WebSocket(this.url);
-    console.log("hello");
     this.#initDefaultEventHandlers();
   }
 
@@ -51,10 +50,12 @@ class WebSocketConnection {
   }
 
   close() {
+    Utils.DEBUG(`Closing connection... (${this.url})`);
     this.websocket?.close();
   }
 
   sendMessage(message: string) {
+    Utils.DEBUG(`Sent message to server (${this.url}): "${message}"`);
     this.websocket?.send(message);
   }
 }
