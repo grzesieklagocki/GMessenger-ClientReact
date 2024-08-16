@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import MessageTextInput from "./MessageTextInput";
 import WebsocketApiRequestsProcessor from "../connection/api/WebsocketApiRequestsProcessor";
 import OkResponseMockConnection from "../connection/mocks/OkResponderMockConnection";
-import ApiRequest, { ApiRequestType } from "../connection/api/ApiRequest";
+import ApiRequestFactory from "../connection/api/ApiRequestFactory";
 
 function Conversation() {
   const [messages, setMessages] = useState<string[]>([]);
@@ -29,7 +29,7 @@ function Conversation() {
     addMessage(message);
     const sendMessage = async () => {
       const response = await connection.current?.sendRequest(
-        new ApiRequest(ApiRequestType.POST, "test", message)
+        ApiRequestFactory.createPost("test", message)
       );
       addMessage(JSON.stringify(response));
     };
