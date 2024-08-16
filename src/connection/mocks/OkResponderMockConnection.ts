@@ -1,4 +1,3 @@
-import Utils from "../../utils/utils";
 import ApiMessage, { ApiMessageType } from "../api/ApiMessage";
 import ApiRequest from "../api/ApiRequest";
 import ApiRequestResponseFactory from "../api/ApiRequestResponseFactory";
@@ -20,17 +19,10 @@ class OkResponseMockConnection implements Connection {
     this._onDisconnect(null);
   }
   sendData(data: string): void {
-    Utils.DEBUG("OkResponseMockConnection.sendData", data);
-
     setTimeout(() => this._onDataReceived(data), this.delay);
   }
   set onDataReceived(callback: (data: string) => any) {
     this._onDataReceived = (data) => {
-      Utils.DEBUG(
-        "OkResponseMockConnection.onDataReceived",
-        "Received data",
-        data
-      );
       try {
         const message: ApiMessage = JSON.parse(data);
 
@@ -43,14 +35,8 @@ class OkResponseMockConnection implements Connection {
           request.data
         );
         const replyMessage = new ApiMessage(response);
-        Utils.DEBUG(
-          "OkResponseMockConnection.onDataReceived",
-          "Sent response",
-          replyMessage
-        );
         callback(JSON.stringify(replyMessage));
       } catch (e) {
-        Utils.DEBUG("OkResponseMockConnection.onDataReceived", "Error", e);
         this._onError(e);
       }
     };
