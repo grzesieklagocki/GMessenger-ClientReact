@@ -1,4 +1,4 @@
-export enum ApiRequestType {
+export enum ApiRequestMethod {
   GET = "GET",
   POST = "POST",
   PUT = "PUT",
@@ -11,7 +11,7 @@ class ApiRequest {
   public static nextNumber: number = 0;
 
   constructor(
-    public type: ApiRequestType,
+    public method: ApiRequestMethod,
     public url: string,
     public data?: any
   ) {
