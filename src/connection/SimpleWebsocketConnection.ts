@@ -1,23 +1,20 @@
 import Utils from "../utils/utils";
 import Connection from "./Connection";
 
-class WebSocketConnection implements Connection {
+class SimpleWebsocketConnection implements Connection {
   private websocket: WebSocket | null = null;
-  private host: string;
-  private port: number;
   get url(): string {
     return this.host && this.port ? `ws://${this.host}:${this.port}` : "";
   }
 
-  constructor(host: string, port: number) {
-    this.host = host;
-    this.port = port;
+  constructor(private host: string, private port: number) {
     this.websocket = new WebSocket(this.url);
-    this.#initDefaultEventHandlers();
+    Utils.DEBUG(`Connecting to server... (${this.url})`);
+    this.initDefaultEventHandlers();
   }
 
   // for add DEBUG calls inside eventHandlers
-  #initDefaultEventHandlers() {
+  private initDefaultEventHandlers() {
     this.onConnect = () => {};
     this.onDisconnect = () => {};
     this.onDataReceived = () => {};
@@ -44,7 +41,7 @@ class WebSocketConnection implements Connection {
     };
   }
 
-  set onConnect(callback: (e: Event) => void) {
+  set onConnect(callback: (e: Event) => any) {
     if (this.websocket === null) throw Error("Websocket is null");
 
     this.websocket.onopen = (e) => {
@@ -59,6 +56,7 @@ class WebSocketConnection implements Connection {
     this.websocket.onclose = (e) => {
       Utils.DEBUG(`Disconnected from server: (${this.url})`, e);
       callback(e);
+      this.websocket = null;
     };
   }
 
@@ -72,4 +70,4 @@ class WebSocketConnection implements Connection {
   }
 }
 
-export default WebSocketConnection;
+export default SimpleWebsocketConnection;
