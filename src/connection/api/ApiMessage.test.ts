@@ -12,6 +12,7 @@ describe("Testing ApiMessage", () => {
     request.id
   );
 
+  
   const requestMessage = new ApiMessage(request);
   const responseMessage = new ApiMessage(response);
 
@@ -30,5 +31,9 @@ describe("Testing ApiMessage", () => {
     expect(responseMessage.data).toBeInstanceOf(ApiRequestResponse);
     expect(responseMessage.data).not.toBeInstanceOf(ApiRequest);
     expect(responseMessage.data).toBe(response);
+  });
+  it("should throw error if 'data' is not ApiRequest or ApiRequestResponse", () => {
+    const invalidData = {};
+    expect(() => new ApiMessage(invalidData as any)).toThrowError("data type");
   });
 });
