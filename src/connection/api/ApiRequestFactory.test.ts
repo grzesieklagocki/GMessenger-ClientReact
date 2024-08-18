@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import ApiRequestFactory from "./ApiRequestFactory";
 import ApiRequest, { ApiRequestMethod } from "./ApiRequest";
 
-describe("Testing ApiRequestFactory static methods returning instances with correct url's and ApiRequestMethods", () => {
+describe("Testing ApiRequestFactory static methods is returning instances with correct url's and ApiRequestMethods", () => {
   it("should return ApiRequest instance with method=DELETE and url='test/delete'", () => {
     const request: ApiRequest = ApiRequestFactory.createDelete("test/delete");
     expect(request.method).toBe(ApiRequestMethod.DELETE);
