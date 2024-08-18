@@ -3,12 +3,14 @@ import MessageTextInput from "./MessageTextInput";
 import WebsocketApiRequestsProcessor from "../connection/api/WebsocketApiRequestsProcessor";
 import OkResponseMockConnection from "../connection/mocks/OkResponderMockConnection";
 import ApiRequestFactory from "../connection/api/ApiRequestFactory";
+import ApiRequestsProcessor from "../connection/api/ApiRequestsProcessor";
+import Connection from "../connection/Connection";
 
 function Conversation() {
   const [messages, setMessages] = useState<string[]>([]);
   const [message, setMessage] = useState<string>("");
 
-  const connection = useRef<WebsocketApiRequestsProcessor | null>(null);
+  const connection = useRef<ApiRequestsProcessor<Connection> | null>(null);
   const addMessage = useCallback((msg: string) => {
     setMessages((messages) => [...messages, msg]);
   }, []);
@@ -27,16 +29,16 @@ function Conversation() {
     if (message.trim() === "") return;
 
     addMessage(message);
-    const sendMessage = async () => {
-      const response = await connection.current?.sendRequest(
-        ApiRequestFactory.createPost("test", message)
-      );
-      addMessage(JSON.stringify(response));
-    };
     sendMessage();
-
     setMessage("");
   }, [message, addMessage]);
+
+  const sendMessage = async () => {
+    const response = await connection.current?.sendRequest(
+      ApiRequestFactory.createPost("test", message)
+    );
+    addMessage(JSON.stringify(response));
+  };
 
   return (
     <div>
