@@ -1,7 +1,8 @@
+import Connection from "../Connection";
 import ApiRequest from "./ApiRequest";
 import ApiRequestResponse from "./ApiRequestResponse";
 
-abstract class ApiRequestProcessor<ConnectionType> {
+abstract class ApiRequestProcessor<ConnectionType extends Connection> {
   constructor(
     protected connection: ConnectionType,
     public maxTimeoutMs: number
