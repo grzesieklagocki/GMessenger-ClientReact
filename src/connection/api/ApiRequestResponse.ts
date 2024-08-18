@@ -6,8 +6,8 @@ export enum ApiRequestResponseCode {
 
 class ApiRequestResponse {
   constructor(
-    public requestId: string | null,
     public code: ApiRequestResponseCode,
+    public requestId: string | null,
     public data?: any
   ) {}
 }
